@@ -1,4 +1,5 @@
-//test
+import { ApiDataDiv } from "./components/ApiDataDiv";
+import { ApiFormDiv } from "./components/ApiFormDiv";
 
 function App() {
 
@@ -22,8 +23,8 @@ function App() {
     <div style={styles.appDiv}>
       <h1 style={styles.header}> Stocks Data</h1>
         <div style={styles.primaryDiv}>
-          <div style={styles.formDiv}/>
-          <div style={styles.dataDiv}/>
+          <ApiFormDiv style={styles.formDiv}/>
+          <ApiDataDiv style={styles.dataDiv}/>
       </div>
     </div>
   );
