@@ -1,5 +1,6 @@
 import { ApiDataDiv } from "./components/ApiDataDiv";
 import { ApiFormDiv } from "./components/ApiFormDiv";
+import ApiDataProvider from "./providers/ApiDataProvider";
 
 function App() {
 
@@ -23,8 +24,10 @@ function App() {
     <div style={styles.appDiv}>
       <h1 style={styles.header}> Stocks Data</h1>
         <div style={styles.primaryDiv}>
-          <ApiFormDiv style={styles.formDiv}/>
-          <ApiDataDiv style={styles.dataDiv}/>
+          <ApiDataProvider>
+            <ApiFormDiv style={styles.formDiv}/>
+            <ApiDataDiv style={styles.dataDiv}/>
+          </ApiDataProvider>
       </div>
     </div>
   );
