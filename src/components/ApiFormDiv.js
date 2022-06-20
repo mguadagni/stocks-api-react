@@ -6,34 +6,55 @@ export const ApiFormDiv = (props) => {
 
     const BASE_URI = "http://localhost:4000/api/overview/"
 
-    const [inputData, setInputData]= useState("")
-    const [selected, setSelected]= useState("all")
+    const [formData, setFormData]= useState({query: '', selectedQuery: 'all', uploadInput: ''})
 
     const {setData} = useApiDataContext();
+
+    const {selectedQuery, query, uploadInput} = formData;
 
     const noQueryOptions = ['all']
 
     const requestData = () => {
-        console.log("Requesting Data...");
-
-        axios.get(BASE_URI + (noQueryOptions.includes(selected) ? selected : selected + "/" + inputData))
+        const url = BASE_URI + (noQueryOptions.includes(selectedQuery) ? selectedQuery : selectedQuery + "/" + query)
+        axios.get(url)
         .then( res => {
             setData(res.data)
             console.log(res.data);
-            // alert("Request was succesfull")
         })
         .catch( err => {
             alert("Error: \n" + err.message)
             console.log(err);
         })
-
-       //console.log(inputData);
+    }
+    const deleteAllResources = () => {
+        axios.delete(BASE_URI + "all")
+        .then( res => {
+            setData([])
+            alert("Deleted All Resources:\n"+res.data)
+            console.log(res.data);
+        })
+        .catch( err => {
+            alert("Error: \n" + err.message)
+            console.log(err);
+        })
+    }
+    const uploadTestResources = () => {
+        axios.post(BASE_URI + "all")
+        .then( res => {
+            setData(res.data)
+            alert("Uploaded Test Resources")
+            console.log(res.data);
+        })
+        .catch( err => {
+            alert("Error: \n" + err.message)
+            console.log(err);
+        })
     }
 
   return (
     <div style={{...props.style}}>
         <h2>API Form</h2>
-        <select value={selected} onChange={e=>{setSelected(e.target.value)}}>
+        <select value={selectedQuery} onChange={e=>{setFormData({...formData, selectedQuery: e.target.value})}}>
             <option value="all">All</option>
             <option value="exchange">By Exchange</option>
             <option value="symbol">By Symbol</option>
@@ -42,18 +63,30 @@ export const ApiFormDiv = (props) => {
             <option value="ddbefore">Dividend Date Before yyyy-mm-dd</option>
         </select>
         <input 
-        style={{textAlign: 'center', display: noQueryOptions.includes(selected) ? 'none' :'initial'}}
+        style={{textAlign: 'center', display: noQueryOptions.includes(selectedQuery) ? 'none' :'initial'}}
         type='text' 
         id='text-input'
         placeholder='Search Data'
-        value={inputData}
-        onChange={e=>{setInputData(e.target.value)}}
+        value={query}
+        onChange={e=>{setFormData({...formData, query: e.target.value})}}
         />
         <button
         syle={{marginTop:10}}
         onClick={requestData}
         >
             Request Data
+        </button>
+        <button
+        syle={{marginTop:10}}
+        onClick={deleteAllResources}
+        >
+            Delete All Data
+        </button>
+        <button
+        syle={{marginTop:10}}
+        onClick={uploadTestResources}
+        >
+            Upload Test Data
         </button>
         </div>
   )
