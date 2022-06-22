@@ -9,10 +9,9 @@ export const ApiDataDiv = (props) => {
   return (
     <div style={{...props.style}}>
         <h2>Data</h2>
-        {/*JSON.stringify(data, null, 2)*/}
-        {data.length > 0 ? data.map(stock => {return (
+        {Array.isArray(data) ? data.map(stock => {return (
             <StockOverview data={stock} />
-        )}) : null}
+        )}) : JSON.stringify(data, null, 2)}
     </div>
   )
 }
