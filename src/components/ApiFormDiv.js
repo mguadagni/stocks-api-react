@@ -7,10 +7,10 @@ export const ApiFormDiv = (props) => {
     const BASE_URI = "http://localhost:4000/api/overview/"
 
     const [formData, setFormData]= useState({query: '', selectedQuery: 'all', uploadInput: ''})
+    const {selectedQuery, query, uploadInput} = formData;
 
     const {setData} = useApiDataContext();
 
-    const {selectedQuery, query, uploadInput} = formData;
 
     const noQueryOptions = ['all']
 
@@ -42,6 +42,20 @@ export const ApiFormDiv = (props) => {
         axios.post(BASE_URI + "all")
         .then( res => {
             setData(res.data)
+            setFormData({...formData, uploadInput: ''})
+            alert("Uploaded Test Resources")
+            console.log(res.data);
+        })
+        .catch( err => {
+            alert("Error: \n" + err.message)
+            console.log(err);
+        })
+    }
+
+    const uploadResources = () => {
+        axios.post(BASE_URI + uploadInput)
+        .then( res => {
+            setData([res.data])
             alert("Uploaded Test Resources")
             console.log(res.data);
         })
@@ -63,31 +77,46 @@ export const ApiFormDiv = (props) => {
             <option value="ddbefore">Dividend Date Before yyyy-mm-dd</option>
         </select>
         <input 
-        style={{textAlign: 'center', display: noQueryOptions.includes(selectedQuery) ? 'none' :'initial'}}
-        type='text' 
-        id='text-input'
-        placeholder='Search Data'
-        value={query}
-        onChange={e=>{setFormData({...formData, query: e.target.value})}}
+            style={{textAlign: 'center', display: noQueryOptions.includes(selectedQuery) ? 'none' :'initial'}}
+            type='text' 
+            id='text-input'
+            placeholder='Search Data'
+            value={query}
+            onChange={e=>{setFormData({...formData, query: e.target.value})}}
         />
         <button
-        syle={{marginTop:10}}
-        onClick={requestData}
+            syle={{marginTop:10}}
+            onClick={requestData}
         >
             Request Data
         </button>
         <button
-        syle={{marginTop:10}}
-        onClick={deleteAllResources}
+            syle={{marginTop:10}}
+            onClick={deleteAllResources}
         >
             Delete All Data
         </button>
         <button
-        syle={{marginTop:10}}
-        onClick={uploadTestResources}
+            syle={{marginTop:10}}
+            onClick={uploadTestResources}
         >
             Upload Test Data
         </button>
-        </div>
+
+        <input 
+            style={{textAlign: 'center', marginTop: 50}}
+            type='text' 
+            id='text-input'
+            placeholder='Upload Input'
+            value={uploadInput}
+            onChange={e=>{setFormData({...formData, uploadInput: e.target.value})}}
+        />
+        <button
+            syle={{marginTop:10}}
+            onClick={uploadResources}
+        >
+            Upload Resource By Input
+        </button>
+    </div>
   )
 }
